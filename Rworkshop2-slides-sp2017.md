@@ -10,9 +10,9 @@ https://github.com/jehopark/r-workshop-for-intermediate-sp2017
 
 Some Housekeeping Stuff
 ========================================================
-- **Slides** at http://bit.ly/hmc-r-workshop-slides-sp2017
-- **R files** at http://bit.ly/hmc-r-workshop-github-sp2017
-- **Sign-in** at http://bit.ly/hmc-r-workshop-sign-in
+- **Slides** at http://bit.ly/hmc-r-workshop2-slides-sp2017
+- **R files** at http://bit.ly/hmc-r-workshop2-github-sp2017 
+- **Sign-in** at http://bit.ly/hmc-r-workshop2-signin-sp2017 
 - **Digital badge requirements**
   - Attend the workshop (Sign-in above)
   - Your work in RStudio (R file submission)
@@ -187,8 +187,9 @@ plot(wt, mpg, col.lab="red") # change settings within plot()
 R Programming
 ===================
 * User-defined functions
-* Loops and vectorization
-* If-else
+* Loop syntax
+* Vectorization
+* If-else syntax
 * Good coding style practices
 
 User-defined Functions
@@ -239,21 +240,8 @@ while(i < 5) {
 }
 ```
 
-If-else statement
-====================
 
-
-```r
-if (condition1) {
-  # do this when condition1 == TRUE
-} else if (condition2) {
-  # do this when condition2 == TRUE
-} else {
-  # else do this
-}
-```
-
-Vectorization
+Vectorization example
 ====================
 
 ```r
@@ -270,6 +258,8 @@ system.time(
 )
 ```
 
+Vectorization example
+====================
 
 ```r
 #### vectorized version
@@ -279,6 +269,20 @@ mymat1 <- replicate(m, rnorm(n))
 system.time(
   mymat1 <- mymat1 + 10*sin(0.75*pi)
 )
+```
+
+If-else statement
+====================
+
+
+```r
+if (condition1) {
+  # do this when condition1 == TRUE
+} else if (condition2) {
+  # do this when condition2 == TRUE
+} else {
+  # else do this
+}
 ```
 
 Good Coding Style Practices
@@ -319,9 +323,9 @@ nonneg_vec(c(3, 5, -1, 2, -4)) # error? why?
 Brief Intro to R Markdown (and R Presentation)
 ====================================
 **What is R Markdown?**<br>
-"R Markdown is a file format for making dynamic documents with R" <br>
+R markdown is a markup language (like LaTeX or HTML) for making dynamic documents with R<br>
 
-You can use R markdown to create documents with R code (and results) in HTML, PDF, and Word.<br>
+You can use R markdown to create (dynamic) documents with R code (and results) in HTML, PDF, and Word.<br>
 RStudio provides a nice integration with R Markdown.
 
 Brief Intro to R Markdown (and R Presentation)
@@ -336,13 +340,13 @@ https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
 That's it!
 ========================================================
 
-Please submit your R function file via http://bit.ly/hmc-r-workshop-sign-in (digital badge requirement).
-
-*You should know how to export the objetcs in your environment to a Rdata file.
+Please submit your R file via<br> http://bit.ly/hmc-r-workshop2-signin-sp2017 (digital badge requirement).
 
 __Further Study!__
 
 * Online learning resources:<br> https://www.rstudio.com/online-learning/#R
 * Swirl (self-paced interactive learning) package:<br> http://swirlstats.com/ 
 * UCLA Institute for Digital Research and Education:<br> http://www.ats.ucla.edu/stat/r/ 
+* Advanced R<br>
+http://adv-r.had.co.nz/
 
