@@ -58,9 +58,10 @@ _2) a free github account_
 Working with Data (cont. from Beginners workshop)
 =============================
 * Working with raw data (text files)
-* Data import and export
+* Data import 
+* Data export
 * Subsetting
-* Using data frames vs. matrices
+* Graphics
 
 Working with Raw Data (text files)
 ==============================
@@ -187,6 +188,7 @@ R Programming
 ===================
 * User-defined functions
 * Loops and vectorization
+* If-else
 * Good coding style practices
 
 User-defined Functions
