@@ -1,0 +1,346 @@
+R for Intermediate Users
+========================================================
+author: Jeho Park
+date: Feb 2, 2017
+transition: none
+
+HMC Scientific Computing Workshop Series, Spring 2017
+
+https://github.com/jehopark/r-workshop-for-intermediate-sp2017
+
+Some Housekeeping Stuff
+========================================================
+- **Slides** at http://bit.ly/hmc-r-workshop-slides-sp2017
+- **R files** at http://bit.ly/hmc-r-workshop-github-sp2017
+- **Sign-in** at http://bit.ly/hmc-r-workshop-sign-in
+- **Digital badge requirements**
+  - Attend the workshop (Sign-in above)
+  - Your work in RStudio (R file submission)
+
+
+Workshop Agenda
+========================================================
+* R programming environment (2): RStudio project and Git
+* Working with Data (2): Data subsetting, graph manipulation
+* R programming: function, loop, vectorization
+* R markdown: PDF, LaTeX, and HTML document (brief)
+* Resources to learn R further on your own
+
+Getting help online and offline
+===============================
+* Rseek meta search engine: http://rseek.org/ 
+* R-help listserv: https://www.r-project.org/mail.html
+* Stack Overflow: http://stackoverflow.com/questions/tagged/r
+* Cross-Validated: the statistics Q&A site http://stats.stackexchange.com/
+* Contact CIS: helpdesk@hmc.edu or jepark@hmc.edu
+* HMC R Users Group: r-users-l@g.hmc.edu
+
+Get ready
+========================================================
+* Open RStudio!
+
+RStudio Project and Git
+========================================================
+__RStudio Projects__<br>
+"RStudio projects make it straightforward to divide your work into multiple contexts, each with their own working directory, workspace, history, and source documents."
+https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects (must read!)
+
+RStudio Project and Git (cont.)
+========================================================
+**How do I manage my R project with version control?**<br>
+http://bit.ly/rstudio-git 
+
+_Prerequisites:_ <br> 
+_1) git program installed on your computer_<br>
+_2) a free github account_
+
+
+Working with Data (cont. from Beginners workshop)
+=============================
+* Working with raw data (text files)
+* Data import and export
+* Subsetting
+* Using data frames vs. matrices
+
+Working with Raw Data (text files)
+==============================
+* Use read.table() to read text files into R
+* Try help document for read.table()
+
+Data Import
+==============================
+* read.csv() is a special case of read.table() 
+* Data import from your **local folder**
+
+```r
+cpds <- read.csv(file.path('.', 'data', 'cpds.csv'))
+head(cpds) # good to look at a few lines
+class(cpds) # data.frame
+```
+* Data import from **the Internet**
+
+```r
+data <- read.table(file="http://scicomp.hmc.edu/data/R/normtemp.txt", header=T)
+tail(data)
+```
+
+Data Import (Cont.)
+================================
+A caution using read.table:<br>
+
+```r
+rta <- read.table("./data/RTADataSub.csv", sep = ",", head = TRUE)
+dim(rta)
+rta[1:5, 1:5]
+class(rta)
+class(rta$time) # what? let's see ?read.table more carefully
+```
+
+```r
+rta2 <- read.table("./data/RTADataSub.csv", sep = ",", head = TRUE, stringsAsFactors = FALSE)
+class(rta2$time)
+```
+
+Data Export
+=============================
+* Use write.table() to write data to a CSV file
+
+```r
+write.csv(data, file = "temp.csv", row.names = FALSE) 
+```
+* Save all the objects in current environmet 
+
+```r
+save.image(file="myenv.RData") 
+# Q: How to load them back later?
+```
+
+Subsseting
+=========================
+Operators that can be used to extract subsets of R objects.
+* '[' and ']' always returns an object of the same class as the original; can be used to select more than one element.
+* '[[' and ']]' is used to extract elements of a list or a data frame; it can only be used to extract a single element.
+* $ is used to extract elements of a list or data frame by name.
+
+Subsetting (cont.)
+==========================
+
+```r
+x <- c("a", "b", "c", "c", "d", "a")
+x[1]
+x[1:4]
+x[x > "a"] 
+u <- x > "a" # what's u here?
+u
+x[u] # subsetting using a boolean vector
+y <- list(foo=x, bar=x[u]) 
+y
+y[[1]]
+y$bar
+```
+
+```r
+subset(mtcars, gear == 5) # use of subset function for data frames
+```
+
+Graphics (base graphics)
+=============================
+* Creating a graph
+
+```r
+attach(mtcars) # Attach mtcars to search path
+plot(wt, mpg) # notice objects are called by their names, not mtcars$wt
+plot(wt, mpg, 
+     main = "Regression of MPG on Weight",
+     xlab = "Weight", 
+     ylab = "MPG")
+plot(wt, mpg, ann = FALSE) #annotation!
+```
+* Changing/adding the details afterwards
+
+```r
+abline(h=25) # a reference line
+abline(lm(mpg~wt)) # look at the argument, what's lm?
+title(main = "Regression of MPG on Weight", xlab = "Weight", ylab = "MPG")
+```
+ 
+Manipulating graphs (base package)
+=============================
+* par() customizes many features of graphs such as fonts, colors, axes, and titles
+* par(optionname=value, optionname=value, ...)
+
+```r
+par()              # view current settings
+orig_par <- par(no.readonly = TRUE)  # save current settings execpt r.o. attributes
+par(col.lab="red") # red x and y labels 
+plot(wt, mpg)      # create a plot with these new settings 
+par(orig_par)      # restore original settings
+plot(wt, mpg)
+plot(wt, mpg, col.lab="red") # change settings within plot()
+```
+
+```r
+?par # see all the options
+```
+
+R Programming
+===================
+* User-defined functions
+* Loops and vectorization
+* Good coding style practices
+
+User-defined Functions
+===================
+* Modulize your code by encapsulating a set of operations
+* Eliminate redundancy
+* Increase readability
+
+User-defined Functions (cont)
+====================
+
+```r
+mult_fun <- function(a = 1, b = 1) {
+  return(a*b)
+}
+
+mult_fun  # show the function's code
+mult_fun(2,3) # function call
+mult_fun() # would this be an error?
+```
+* A function returns the last value operated
+* A function returns only one object; use a list to return multiple objects
+* Every operation in R is a function call
+
+```r
+x <- 10; y <- 20
+x + y
+`+`(x, y)
+```
+
+Loops
+==================
+* For loops
+
+```r
+for(i in 1:10) {
+  print(i)
+}
+```
+
+* While loops
+
+```r
+i <- 0
+while(i < 5) {
+  i <- i + 1 
+  print(i)
+}
+```
+
+If-else statement
+====================
+
+
+```r
+if (condition1) {
+  # do this when condition1 == TRUE
+} else if (condition2) {
+  # do this when condition2 == TRUE
+} else {
+  # else do this
+}
+```
+
+Vectorization
+====================
+
+```r
+########## a bad loop, with 'growing' data
+set.seed(42);
+m=1000; n=1000;
+mymat <- replicate(m, rnorm(n)) # create matrix of normal random numbers
+system.time(
+  for (i in 1:m) {
+    for (j in 1:n) {
+      mymat[i,j] <- mymat[i,j] + 10*sin(0.75*pi)
+    }
+  }
+)
+```
+
+
+```r
+#### vectorized version
+set.seed(42);
+m=1000; n=1000;
+mymat1 <- replicate(m, rnorm(n))
+system.time(
+  mymat1 <- mymat1 + 10*sin(0.75*pi)
+)
+```
+
+Good Coding Style Practices
+======================
+* Always give meaningful names
+  + fit-models.R instead of foo.r
+  + sample_1 instead of s1
+* Spacing around all infix operators (=, +, -, *, etc)
+  + average <- mean(feet / 12 + inches, na.rm = TRUE)
+  + average<-mean(feet/12+inches,na.rm=TRUE)
+* Always indent the code inside curly braces.
+
+```r
+if (y < 0 && debug) {
+  message("Y is negative")
+} else {
+  message("Y is not negative")
+}
+```
+
+Exercise (5-10 min)
+==============================
+Write an R function that will take an input vector and set any negative values in the vector to zero.
+
+
+```r
+nonneg_vec <- function(x) {
+  # check if x is a vector; if not, use stop function to exit
+  # use ifelse to convert neg #s to 0
+}
+```
+Once created, save it as an R file and try:
+
+```r
+nonneg_vec(c(3, 5, -1, 2, -4)) # error? why?
+```
+
+Brief Intro to R Markdown (and R Presentation)
+====================================
+**What is R Markdown?**<br>
+"R Markdown is a file format for making dynamic documents with R" <br>
+
+You can use R markdown to create documents with R code (and results) in HTML, PDF, and Word.<br>
+RStudio provides a nice integration with R Markdown.
+
+Brief Intro to R Markdown (and R Presentation)
+====================================
+**Now let's just try**<br>
+File >> New File >> R Markdown...
+
+http://rmarkdown.rstudio.com/ <br>
+https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
+
+
+That's it!
+========================================================
+
+Please submit your R function file via http://bit.ly/hmc-r-workshop-sign-in (digital badge requirement).
+
+*You should know how to export the objetcs in your environment to a Rdata file.
+
+__Further Study!__
+
+* Online learning resources:<br> https://www.rstudio.com/online-learning/#R
+* Swirl (self-paced interactive learning) package:<br> http://swirlstats.com/ 
+* UCLA Institute for Digital Research and Education:<br> http://www.ats.ucla.edu/stat/r/ 
+
